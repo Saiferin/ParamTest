@@ -5,10 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.stream.Stream;
 
@@ -69,5 +66,16 @@ public class ParamTest {
         $("ul.repo-list li").$("a").click();
         $(partialLinkText("Issues")).click();
         $(withText(issues)).should(Condition.visible);
+    }
+
+    enum Direction {
+        JUnit5, TestNg
+    }
+
+    @ParameterizedTest
+    @EnumSource(Direction.class)
+    void testWithEnumSource(Direction textSearch) {
+        $("[data-test-selector='nav-search-input']").setValue(String.valueOf(textSearch)).pressEnter();
+        $(".repo-list").shouldHave(Condition.text(String.valueOf(textSearch)));
     }
 }
